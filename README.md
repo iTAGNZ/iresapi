@@ -12,12 +12,15 @@ Here are some guidelines for use:
 - A valid API token must be present in the query string as a GET variable named `token`
 - Resources that are available to you are deduced from the API token you supply
 - Responses are in JSON format, e.g. a successful response not returning any useful data:
+
 	{
 		"code": 200,
 		"message": "",
 		"description": ""
 	}
+	
 - "pretty" JSON formatting can be turned off by specifying `pretty=no` in the query string:
+
 	{"code":200,"message":"","description":""}
 	
 Here is an example of an API request URL to iRES. This resource will return a list of operators:
@@ -25,8 +28,8 @@ Here is an example of an API request URL to iRES. This resource will return a li
     https://ires.co.nz/api/v1/operators?token=YOURAPIACCESSTOKEN
 
 ## Resources
-- operators[/id] - *Gets a list of iRES operators if `id` is not specified. If the `id` is specified, this method will return information about the specified operator.*
-- operators/id/products - *Gets a list of products associated with the specified operator.*
+- **operators[/id]** - *Gets a list of iRES operators if `id` is not specified. If the `id` is specified, this method will return information about the specified operator.*
+- **operators/id/products** - *Gets a list of products associated with the specified operator.*
 
 Optional query string parameters may be specified to search, sort and filter the results returned:
 
