@@ -23,7 +23,7 @@ Here are some guidelines for use:
 	
 - "pretty" JSON formatting can be turned off by specifying `noPretty` in the query string:
 
-    /api/v1/operators?token=YOURAPIACCESSTOKEN&noPretty
+`/api/v1/operators?token=YOURAPIACCESSTOKEN&noPretty`
 
 ```json
 {"code":200,"message":"","description":""}
