@@ -6,12 +6,12 @@ Please either star this repository, or visit back in February 2014 for definitiv
 ## Introduction
 
 Here are some guidelines for use:
-- iRES API (v1) is a RESTful API, incorrect HTTP methods will generate an erorr message
-- Requests must be over SSL, other protocols will generate an error message
+- iRES API (v1) is a RESTful API, incorrect HTTP methods will generate an error message
+- Requests **must** be over SSL, other protocols will generate an error message
 - An API version number must be present in the URL after the `api` parameter
 - A valid API token must be passed via the appropriate HTTP method
 - Resources that are available to you are deduced from the API token you supply
-- Responses are in JSON format, e.g. a successful response not returning any useful data:
+- Responses are in JSON format with corresponding headers, e.g. a successful response not returning any useful data:
 
 ```json
 {
@@ -45,7 +45,7 @@ Optional query string parameters may be specified to search, sort and filter the
 - `operatorType`: activity, accommodation, rental, passenger, external. *Default: activity*
 
 #### Sorting
-- `order`: defines the sort order. Options are `name` *(default)*, `ASC` *(default)* or `DESC`
+- `order`: defines the sort order. Options are name *(default)*, ID, website, phone or contact, with or without `ASC` *(default)* or `DESC`
 
 #### Searching
 - `q`: multi-word search string spaced by `+`, e.g. `Air+Skydive`. *Default: null*
