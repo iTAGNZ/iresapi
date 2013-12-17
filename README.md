@@ -30,7 +30,8 @@ Here are some guidelines for use:
 ```
 	
 Here is an example of an API request URL to iRES. This resource will return a list of operators:
-    https://ires.co.nz/api/v1/operators?token=YOURAPIACCESSTOKEN
+
+`https://ires.co.nz/api/v1/operators?token=YOURAPIACCESSTOKEN`
 
 ## Resources
 - **operators[/id]** - *Gets a list of iRES operators if `id` is not specified. If the `id` is specified, this method will return information about the specified operator.*
