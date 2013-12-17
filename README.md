@@ -13,15 +13,15 @@ Here are some guidelines for use:
 - Resources that are available to you are deduced from the API token you supply
 - Responses are in JSON format, e.g. a successful response not returning any useful data:
 
-	{
+	`{
 		"code": 200,
 		"message": "",
 		"description": ""
-	}
+	}`
 	
 - "pretty" JSON formatting can be turned off by specifying `pretty=no` in the query string:
 
-	{"code":200,"message":"","description":""}
+    {"code":200,"message":"","description":""}
 	
 Here is an example of an API request URL to iRES. This resource will return a list of operators:
 
