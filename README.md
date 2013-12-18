@@ -11,6 +11,7 @@ Here are some guidelines for use:
 - An API version number must be present in the URL after the `api` parameter
 - A valid API token must be passed via the appropriate HTTP method
 - Resources that are available to you are deduced from the API token you supply
+- Possible response formats are: JSON, XML.
 - Responses are in JSON format by default with corresponding headers, e.g. a successful response not returning any useful data:
 
 ```json
