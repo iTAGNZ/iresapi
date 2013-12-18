@@ -11,13 +11,15 @@ class iRESAPI {
 	public $url = 'https://ires.co.nz/api/v1';
 	
 	// define default search options
-	public $limit = 30;
-	public $order = 'name ASC';
+	public $limit = null;
+	public $order = null;
+	
+	// define default format for returned data
+	public $format = 'JSON';
 	
 	private $api_url = '';
 	private $action = '';
 	private $api_token = '';
-	private $default_return = 'JSON';
 	private $data_to_send = '';
 	
 	public $response_headers = null;
@@ -98,13 +100,13 @@ class iRESAPI {
 		// make request to API
 		$fp = @fopen($this->api_url, 'rb', false, $request);
 		if(!$fp)
-			throw new Exception('Stream: Error opening URL.');
+			throw new Exception('Stream: Error opening URL: ' . $this->api_url);
 			
 		// get results
 		$response = @stream_get_contents($fp);
 		if($response === false)
 			throw new Exception('Stream: Error getting response.');
-		
+			
 		return $response;
 	}
 	
@@ -149,24 +151,27 @@ class iRESAPI {
 	
 	private function get_data() {
 		// Define data to send via appropriate HTTP method
-		return array(
-			'token' => $this->api_token
-			// these are optional parameters, refer to the docs
-			,'order' => $this->order
-			,'limit' => $this->limit
-		);
+		$data = array('token' => $this->api_token);
+		
+		// these are optional parameters, refer to the docs
+		if($this->order)
+			$data['order'] = $this->order;
+		if($this->limit)
+			$data['limit'] = $this->limit;
+			
+		return $data;
 	}
 	
 	private function set_api_url($action) {
 		$this->action = $action;
-		$this->api_url = $this->url  . '/' . $action;
+		$this->api_url = $this->url  . '/' . $action . '.' . strtolower($this->format);
 	}
 
 	// Check response headers for 200, throw exception when otherwise
 	private function check_response_headers() {
 		$code = $this->get_http_response_code($this->response_headers);
 		$this->response_code = (int)$code;
-		if((int)$code != 200 && $this->die_on_error)
+		if($this->response_code != 200 && $this->die_on_error)
 			throw new Exception('Error: response header is: ' . $this->response_headers[0]);
 	}
 	

@@ -11,7 +11,7 @@ Here are some guidelines for use:
 - An API version number must be present in the URL after the `api` parameter
 - A valid API token must be passed via the appropriate HTTP method
 - Resources that are available to you are deduced from the API token you supply
-- Responses are in JSON format with corresponding headers, e.g. a successful response not returning any useful data:
+- Responses are in JSON format by default with corresponding headers, e.g. a successful response not returning any useful data:
 
 ```json
 {
@@ -21,14 +21,18 @@ Here are some guidelines for use:
 }
 ```
 	
-- "pretty" JSON formatting can be turned off by specifying `noPretty` in the query string:
+- "pretty" formatting can be turned off by specifying `noPretty` in the query string:
 
 `/api/v1/operators?token=YOURAPIACCESSTOKEN&noPretty`
 
 ```json
 {"code":200,"message":"","description":""}
 ```
-	
+
+- Responses can be returned in XML format by appending `.xml` to the endpoint. Pretty formatting applies to XML also.
+
+`/api/v1/operators.xml?token=YOURAPIACCESSTOKEN`
+
 Here is an example of an API request URL to iRES. This resource will return a list of operators:
 
 `https://ires.co.nz/api/v1/operators?token=YOURAPIACCESSTOKEN`
@@ -50,3 +54,92 @@ Optional query string parameters may be specified to search, sort and filter the
 #### Searching
 - `q`: multi-word search string spaced by `+`, e.g. `Air+Skydive`. *Default: null*
 
+## Response structures
+
+### Success
+
+All `GET` responses will return associated data along with headers and a `200 OK` HTTP status code.
+
+#### JSON
+A `GET` request will respond on success with a JSON object containing the requested data. Example:
+
+```json
+[
+	{
+		"id": "1",
+		"name": "Demo Operator",
+		"website": "www.demooperator.com",
+		"phone": "123 4567",
+		"contact": "John Smith"
+	},
+	{
+		"id": "2",
+		"name": "Demo Operator 2",
+		"website": "www.seconddemooperator.com",
+		"phone": "234 5678",
+		"contact": "Joe Bloggs"
+	}
+]
+```
+
+#### XML
+A `GET` request will respond on success with an XML document containing the requested data. The data set will be wrapped in the endpoint name (e.g. `operators`) and the
+items will be wrapped in a singular representation of the endpoint name (e.g. `operator`). Example:
+
+```xml
+<?xml version="1.0"?>
+<operators>
+  <operator>
+    <id>1</id>
+    <name>Demo Operator</name>
+    <website>www.demooperator.com</website>
+    <phone>123 4567</phone>
+    <contact>John Smith</contact>
+  </operator>
+  <operator>
+    <id>2</id>
+    <name>Demo Operator 2</name>
+    <website>www.seconddemooperator.com</website>
+    <phone>234 5678</phone>
+    <contact>Joe Bloggs</contact>
+  </operator>
+</operators>
+```
+
+### Error
+A `GET` request that fails for any reason will return relevant headers and an HTTP status code relating to the error type, e.g. `404 Not Found` for an incorrect URL.
+**Please note:** If an incorrect response format is specified, the corresponding error will always be served in JSON format.
+
+#### JSON
+A JSON `GET` request failure will contain **three** main items:
+- `code`: a copy of the HTTP status code, e.g. `404`
+- `message`: a short message explaining the error
+- `description`: a more detail description of the error
+- additional items may be returned to help fix the error, e.g. if an incorrect output type was sent (not JSON or XML), the error would contain `supportedFormats` with a list of supported formats.
+
+Example:
+
+```json
+{
+	"code": 415,
+	"message": "Output type not supported",
+	"description": "The requested output type is not supported: CSV",
+	"supportedFormats": [
+		"JSON",
+		"XML"
+	]
+}
+```
+#### XML
+An XML `GET` request failure will contain the same items as above. The body will be wrapped in an `<errors>` tag, and each item will be wrapped in an `<error>` tag. Example:
+
+```xml
+<?xml version="1.0"?>
+<errors>
+  <error>
+    <code>401</code>
+    <message>Authentication required</message>
+    <description>You must provide a valid API token.</description>
+  </error>
+</errors>
+```
