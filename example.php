@@ -16,7 +16,10 @@
 require_once('lib/api.php');
 
 // pass your API token into the constructor of iRESAPI class
-$api = new iRESAPI('yourapitoken');
+$api_token = 'exampletoken';
+$private_key = 'sdjefi9es8y9832894f98h';
+
+$api = new iRESAPI($api_token, $private_key);
 
 // For testing purposes: throw exception when header response code is not 200? 
 // If this is false, output will be shown at the bottom of the page.
@@ -77,6 +80,7 @@ switch(strtolower($api->format)) {
 	
 	<h1>iRES API v1 - Example</h1>
 	<p>This page shows you examples of how to connect to iRES API and retrieve information. <a href="https://github.com/robbieaverill/iresapi" target="_blank">For documentation, please click here.</a></p>
+	<p>Currently using API URL: <code><?=$api->url?></code></p>
 	
 	<h2>Operator results:</h2>
 	<ul class="results"><?php

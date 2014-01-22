@@ -20,6 +20,7 @@ class iRESAPI {
 	private $api_url = '';
 	private $action = '';
 	private $api_token = '';
+	private $private_key = '';
 	private $data_to_send = '';
 	
 	public $response_headers = null;
@@ -27,13 +28,17 @@ class iRESAPI {
 	public $die_on_error = false;
 	
 	// instantiate required variables
-	public function __construct($api_token = null) {
+	public function __construct($api_token = null, $private_key = null) {
 		if(!$api_token)
 			die('You must provide an API token!');
+
+		if(!$private_key)
+			die('You must provide a private key!');
 			
 		// Set the required API token. Your credentials for iRES resource access will be
 		// automatically calculated from this API token.
 		$this->api_token = $api_token;
+		$this->private_key = $private_key;
 	}
 	
 	// --- Get operators: CURL option
@@ -158,7 +163,11 @@ class iRESAPI {
 			$data['order'] = $this->order;
 		if($this->limit)
 			$data['limit'] = $this->limit;
-			
+		
+		// generate HMAC checksum of data
+		$hmac = hash_hmac('sha256', implode('', $data), $this->private_key);
+		$data['checksum'] = $hmac;
+
 		return $data;
 	}
 	
