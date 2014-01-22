@@ -59,6 +59,8 @@ $request_data['checksum'] = hash_hmac('sha256', implode($request_data), $private
 ?>
 ```
 
+Your public and private keys will be assigned to you by iRES. **Never** share your private key, or include it in request data sent to iRES.
+
 ## Resources
 - **operators[/id]** - *Gets a list of iRES operators if `id` is not specified. If the `id` is specified, this method will return information about the specified operator.*
 - **operators/id/products** - *Gets a list of products associated with the specified operator.*
