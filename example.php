@@ -16,8 +16,8 @@
 require_once('lib/api.php');
 
 // pass your API token into the constructor of iRESAPI class
-$api_token = 'exampletoken';
-$private_key = 'sdjefi9es8y9832894f98h';
+$api_token = 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3';
+$private_key = '55abc9109d5ea8a77be16bf3c76b4b199b524b12';
 
 $api = new iRESAPI($api_token, $private_key);
 

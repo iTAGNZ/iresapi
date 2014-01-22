@@ -8,7 +8,8 @@
 class iRESAPI {
 
 	// define API URL (format: [server]/api/[version])
-	public $url = 'https://ires.co.nz/api/v1';
+	#public $url = 'https://ires.co.nz/api/v1';
+	public $url = 'https://localhost/api/v1';
 	
 	// define default search options
 	public $limit = null;
@@ -68,12 +69,22 @@ class iRESAPI {
 		curl_close($curl);
 		return $body;
 	}
+
+	// --- Get API authorisation information: Stream option
+	public function get_auth_info_stream($method = 'GET') {
+		$this->set_api_url('authinfo');
+		return $this->api_stream($method);
+	}
 	
 	// --- Get operators: Stream option
-	// http://php.net/stream_context_create
 	public function get_operators_stream($method = 'POST') {
 		$this->set_api_url('operators');
-		
+		return $this->api_stream($method);
+	}
+
+	// Stream option
+	// http://php.net/stream_context_create
+	private function api_stream($method = 'GET') {
 		// params for stream
 		$params = http_build_query($this->get_data());
 		
