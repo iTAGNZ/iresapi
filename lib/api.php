@@ -165,7 +165,7 @@ class iRESAPI {
 			$data['limit'] = $this->limit;
 		
 		// generate HMAC checksum of data
-		$hmac = hash_hmac('sha256', implode('', $data), $this->private_key);
+		$hmac = hash_hmac('sha256', implode($data), $this->private_key);
 		$data['checksum'] = $hmac;
 
 		return $data;

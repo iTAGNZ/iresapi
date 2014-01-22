@@ -1,7 +1,7 @@
 # iRES API v1 - Demo
 
 **NOTE: THIS API DEMO IS CURRENTLY INACTIVE**
-Please either star this repository, or visit back in February 2014 for definitive documentation and examples.
+Please either star this repository, or visit back soon for definitive documentation and examples.
 
 ## Introduction
 
@@ -9,9 +9,8 @@ Here are some guidelines for use:
 - iRES API (v1) is a RESTful API, incorrect HTTP methods will generate an error message
 - Requests **must** be over SSL, other protocols will generate an error message
 - An API version number must be present in the URL after the `api` parameter
-- A valid API token must be passed via the appropriate HTTP method
-- Resources that are available to you are deduced from the API token you supply
-- Possible response formats are: JSON, XML.
+- Authentication iswith a valid API token (public key) and OAuth style HMAC checksum using your private key
+- Possible response formats are: JSON (default), XML.
 - Responses are in JSON format by default with corresponding headers, e.g. a successful response not returning any useful data:
 
 ```json
@@ -24,7 +23,7 @@ Here are some guidelines for use:
 	
 - "pretty" formatting can be turned off by specifying `noPretty` in the query string:
 
-`/api/v1/operators?token=YOURAPIACCESSTOKEN&noPretty`
+`/api/v1/operators?token=YOURAPIACCESSTOKEN&...&noPretty`
 
 ```json
 {"code":200,"message":"","description":""}
@@ -32,11 +31,33 @@ Here are some guidelines for use:
 
 - Responses can be returned in XML format by appending `.xml` to the endpoint. Pretty formatting applies to XML also.
 
-`/api/v1/operators.xml?token=YOURAPIACCESSTOKEN`
+`/api/v1/operators.xml?token=YOURAPIACCESSTOKEN&...`
 
 Here is an example of an API request URL to iRES. This resource will return a list of operators:
 
-`https://ires.co.nz/api/v1/operators?token=YOURAPIACCESSTOKEN`
+`https://ires.co.nz/api/v1/operators?token=YOURAPIACCESSTOKEN&checksum=[HMAC-CHECKSUM]`
+
+## Authenticaton
+The iRES API uses an OAuth style HMAC checksum to sign the request data with your private key and the **sha256** hashing algorithm. You must provide your API token (public key) and a HMAC checksum which should represent all data you are including in the current request (including the API token). For example in a `GET` request with no additional criteria, you would calculate the checksum of only your API token. If you had specified `limit=5` you would calculate the checksum of that criteria joined together.
+
+Here is a PHP example:
+
+```php
+<?php
+$private_key = 'yoursupersecretkey';
+
+$request_data = array(
+	'token' => 'yourapitoken',
+	'limit' => 5,
+	'order' => 'DESC'
+);
+
+// generate the required checksum by combining all request data and using hash_hmac to hash using sha256 as the algorithm and $private_key as the key
+$request_data['checksum'] = hash_hmac('sha256', implode($request_data), $private_key);
+
+// now that $request_data contains a signed HMAC of itself, you can make an API call using $request_data
+?>
+```
 
 ## Resources
 - **operators[/id]** - *Gets a list of iRES operators if `id` is not specified. If the `id` is specified, this method will return information about the specified operator.*
