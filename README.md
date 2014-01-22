@@ -3,6 +3,12 @@
 **NOTE: THIS API DEMO IS CURRENTLY INACTIVE**
 Please either star this repository, or visit back soon for definitive documentation and examples.
 
+## Contents
+[Introduction](#introduction)
+[Authentication](#authentication)
+[Resources](#resources)
+[Response Structures](#response-structures)
+
 ## Introduction
 
 Here are some guidelines for use:
@@ -38,7 +44,7 @@ Here is an example of an API request URL to iRES. This resource will return a li
 `https://ires.co.nz/api/v1/operators?token=YOURAPIACCESSTOKEN&checksum=[HMAC-CHECKSUM]`
 
 ## Authenticaton
-The iRES API uses an OAuth style HMAC checksum to sign the request data with your private key and the **sha256** hashing algorithm. You must provide your API token (public key) and a HMAC checksum which should represent all data you are including in the current request (including the API token). For example in a `GET` request with no additional criteria, you would calculate the checksum of only your API token. If you had specified `limit=5` you would calculate the checksum of that criteria joined together.
+The iRES API uses an OAuth style [HMAC](http://en.wikipedia.org/wiki/Hash-based_message_authentication_code) checksum to sign the request data with your private key and the **sha256** algorithm. You must provide your API token (public key) and a HMAC checksum which should represent all data you are including in the current request (including the API token). For example in a `GET` request with no additional criteria, you would calculate the checksum of only your API token. If you had specified `limit=5` you would calculate the checksum of that criteria joined together.
 
 Here is a PHP example:
 
@@ -52,14 +58,16 @@ $request_data = array(
 	'order' => 'DESC'
 );
 
-// generate the required checksum by combining all request data and using hash_hmac to hash using sha256 as the algorithm and $private_key as the key
+// generate the required checksum by combining all request data and using 
+// hash_hmac to hash using sha256 as the algorithm and $private_key as the key
 $request_data['checksum'] = hash_hmac('sha256', implode($request_data), $private_key);
 
-// now that $request_data contains a signed HMAC of itself, you can make an API call using $request_data
+// now that $request_data contains a signed HMAC of itself, you can make 
+// an API call using $request_data
 ?>
 ```
 
-Your public and private keys will be assigned to you by iRES. **Never** share your private key, or include it in request data sent to iRES.
+Your public and private keys will be assigned to you by iRES. **Never** share your private key, or include it in request data sent to iRES. For an online example of HMAC generation, [click here](http://www.freeformatter.com/hmac-generator.html).
 
 ## Resources
 - **operators[/id]** - *Gets a list of iRES operators if `id` is not specified. If the `id` is specified, this method will return information about the specified operator.*
