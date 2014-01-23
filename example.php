@@ -16,8 +16,8 @@
 require_once('lib/api.php');
 
 // pass your API token into the constructor of iRESAPI class
-$api_token = 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3';
-$private_key = '55abc9109d5ea8a77be16bf3c76b4b199b524b12';
+$api_token = 'test';
+$private_key = 'test';
 
 $api = new iRESAPI($api_token, $private_key);
 
@@ -37,7 +37,8 @@ try {
 	// --- CURL
 	# $operators = $api->get_operators_curl();
 	// --- PHP Streams
-	$operators = $api->get_operators_stream('GET');
+	$operators = $api->get_operators_stream();
+	# $auth_info = $api->get_auth_info_stream();
 	
 	// Note: - the PECL_HTTP extension must be loaded on your server for these methods to work
 	// 	     - header response checks have not been added for these options, so you will need to add your own.

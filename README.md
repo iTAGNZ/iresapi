@@ -41,10 +41,10 @@ Here are some guidelines for use:
 
 Here is an example of an API request URL to iRES. This resource will return a list of operators:
 
-`https://ires.co.nz/api/v1/operators?token=YOURAPIACCESSTOKEN&checksum=[HMAC-CHECKSUM]`
+`https://ires.co.nz/api/v1/operators?token=YOURAPIACCESSTOKEN&timestamp=1390511270&checksum=[HMAC-CHECKSUM]`
 
 ## Authentication
-The iRES API uses an OAuth style [HMAC](http://en.wikipedia.org/wiki/Hash-based_message_authentication_code) checksum to sign the request data with your private key and the **sha256** algorithm. You must provide your API token (public key) and a HMAC checksum which should represent all data you are including in the current request (including the API token). For example in a `GET` request with no additional criteria, you would calculate the checksum of only your API token. If you had specified `limit=5` you would calculate the checksum of that criteria joined together.
+The iRES API uses an OAuth style [HMAC](http://en.wikipedia.org/wiki/Hash-based_message_authentication_code) checksum to sign the request data with your private key and the **sha256** algorithm. You must provide your API token (public key), a UNIX timestamp of when the request is generated, and a HMAC checksum which should represent all data you are including in the current request (including the API token and timestamp). For example in a `GET` request with no additional criteria, you would calculate the checksum of only your API token and timestamp. If you had specified `limit=5` you would calculate the checksum of that criteria joined together.
 
 Here is a PHP example:
 
@@ -54,6 +54,7 @@ $private_key = 'yoursupersecretkey';
 
 $request_data = array(
 	'token' => 'yourapitoken',
+	'timestamp' => time(),
 	'limit' => 5,
 	'order' => 'DESC'
 );
@@ -67,7 +68,29 @@ $request_data['checksum'] = hash_hmac('sha256', implode($request_data), $private
 ?>
 ```
 
+Timestamps will remain valid for 10 minutes, after this an `Authentication Failed` error will be returned. If you are having problems with this because of your server's configuration, get in touch with iRES support.
+
 Your public and private keys will be assigned to you by iRES. **Never** share your private key, or include it in request data sent to iRES. For an online example of HMAC generation, [click here](http://www.freeformatter.com/hmac-generator.html).
+
+### Checking your authentication
+
+You can use the `authinfo` endpoint to return information associated with your authenticated API request and may be useful when setting up your API requests, or to validate your login credentials:
+
+`https://ires.co.nz/api/v1/authinfo?token=YOURAPIACCESSTOKEN&timestamp=1390511270&checksum=[HMAC-CHECKSUM]`
+
+Example output:
+
+```json
+{}
+	"api_token": "YOURAPITOKEN", // your API token (public key)
+	"api_channel_type": "[Agent/Operator/External]", // this is an iRES setting
+	"api_channel_id": "[channel_id]", // this is an iRES setting
+	"api_name": "iRES API Demo\/Example", // your application name, assigned when your API access is set up
+	"api_url": "[YOURAPPURL]", // your application url, assigned when your API access is set up
+	"api_last_accessed": "2014-01-24 10:00:55", // datetime of when you last made a request
+	"api_status": "Active"
+}
+```
 
 ## Resources
 - **operators[/id]** - *Gets a list of iRES operators if `id` is not specified. If the `id` is specified, this method will return information about the specified operator.*

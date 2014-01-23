@@ -77,7 +77,7 @@ class iRESAPI {
 	}
 	
 	// --- Get operators: Stream option
-	public function get_operators_stream($method = 'POST') {
+	public function get_operators_stream($method = 'GET') {
 		$this->set_api_url('operators');
 		return $this->api_stream($method);
 	}
@@ -175,6 +175,10 @@ class iRESAPI {
 		if($this->limit)
 			$data['limit'] = $this->limit;
 		
+		// add unix timestamp (num seconds since UNIX epoch)
+		// see: php.net/time
+		$data['timestamp'] = time();
+
 		// generate HMAC checksum of data
 		$hmac = hash_hmac('sha256', implode($data), $this->private_key);
 		$data['checksum'] = $hmac;
