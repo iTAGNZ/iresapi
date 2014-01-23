@@ -81,7 +81,7 @@ You can use the `authinfo` endpoint to return information associated with your a
 Example output:
 
 ```json
-{}
+{
 	"api_token": "YOURAPITOKEN", // your API token (public key)
 	"api_channel_type": "[Agent/Operator/External]", // this is an iRES setting
 	"api_channel_id": "[channel_id]", // this is an iRES setting
