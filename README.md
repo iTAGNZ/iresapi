@@ -82,12 +82,12 @@ Example output:
 
 ```json
 {
-	"api_token": "YOURAPITOKEN", // your API token (public key)
-	"api_channel_type": "[Agent/Operator/External]", // this is an iRES setting
-	"api_channel_id": "[channel_id]", // this is an iRES setting
-	"api_name": "iRES API Demo\/Example", // your application name, assigned when your API access is set up
-	"api_url": "[YOURAPPURL]", // your application url, assigned when your API access is set up
-	"api_last_accessed": "2014-01-24 10:00:55", // datetime of when you last made a request
+	"api_token": "YOUR API TOKEN",
+	"api_channel_type": "[Agent-Operator-External]",
+	"api_channel_id": "[channel_id]",
+	"api_name": "iRES API Demo\/Example",
+	"api_url": "[YOUR APP URL]",
+	"api_last_accessed": "2014-01-24 10:00:55",
 	"api_status": "Active"
 }
 ```
